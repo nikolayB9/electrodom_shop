@@ -8,6 +8,11 @@ const router = createRouter({
       name: 'main',
       component: () => import('../views/main/Index.vue'),
     },
+    {
+      path: '/category/:id',
+      name: 'category.show',
+      component: () => import('../views/category/Show.vue'),
+    },
   ],
 })
 

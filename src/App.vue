@@ -4,7 +4,27 @@ export default {
 
   mounted() {
     $(document).trigger('changed')
+    this.getCategories()
   },
+
+  data() {
+    return {
+      categories: [],
+    }
+  },
+
+  methods: {
+    getCategories() {
+      this.axios.get('http://127.0.0.1:8000/api/categories')
+          .then(res => {
+            this.categories = res.data.data
+          })
+    },
+
+    closeOffcanvasNavbar() {
+      document.getElementById('openOffcanvasNavbar').click()
+    },
+  }
 }
 </script>
 
@@ -94,64 +114,59 @@ export default {
             </div>
             <div class="offcanvas-body">
               <ul class="navbar-nav">
-                <li class="nav-item dropdown menu">
-                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                     aria-expanded="false" data-bs-auto-close="outside">
-                    Каталог</a>
-                  <ul class="dropdown-menu">
-                    <li>
-                      <a class="dropdown-item" href="category.html">Shoes</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="category.html">Lorem ipsum dolor sit amet,
-                        consectetur adipisicing elit. Doloribus, quos.</a>
-                    </li>
 
-                    <li>
-                      <a class="dropdown-item" href="category.html">Jeans</a>
-                    </li>
-                    <li class="nav-item dropend submenu">
-                      <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown"
-                         data-bs-auto-close="outside">Sportswear</a>
-                      <ul class="dropdown-menu dropdown-menu-end">
-                        <li class="nav-item dropdown sub-submenu">
-                          <a class="dropdown-item dropdown-toggle" href="#"
-                             data-bs-toggle="dropdown"
-                             data-bs-auto-close="outside">Women's Sportswear</a>
-                          <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                              <a class="dropdown-item" href="category.html">Womens 1</a>
-                            </li>
-                            <li>
-                              <a class="dropdown-item" href="category.html">Womens 2</a>
-                            </li>
-                            <li>
-                              <a class="dropdown-item" href="category.html">Lorem ipsum dolor
-                                sit amet, consectetur adipisicing elit. Atque, neque!</a>
-                            </li>
-                            <li>
-                              <a class="dropdown-item" href="category.html">Womens 2</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a class="dropdown-item" href="category.html">Baby's Sportswear</a>
-                        </li>
-                        <li>
-                          <a class="dropdown-item" href="category.html">Lorem ipsum dolor sit
-                            amet, consectetur adipisicing elit. Asperiores dolorem molestias
-                            numquam officia, quasi sed?</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">Coat</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">Shirts</a>
+                <li class="nav-item dropdown menu">
+                  <button class="nav-link dropdown-toggle" id="openOffcanvasNavbar" role="button" data-bs-toggle="dropdown"
+                     aria-expanded="false" data-bs-auto-close="outside">
+                    Каталог</button>
+                  <ul class="dropdown-menu">
+                    <li v-for="category in categories" class="nav-item dropend category-menu">
+
+                      <!-- Zero-level nesting categories  -->
+                      <router-link :to="{ name: 'category.show', params: {id: category.id} }"
+                                   @click="closeOffcanvasNavbar"
+                                   class="category-link">
+                        {{ category.title }}
+                      </router-link>
+
+                      <!-- Categories of the first level of nesting  -->
+                      <template v-if="category.sub_categories">
+                        <button class="dropdown-item dropdown-toggle category-open-submenu" data-bs-toggle="dropdown"
+                                data-bs-auto-close="outside">
+                          <span class="icon-open-submenu"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                          <li v-for="sub_category in category.sub_categories" class="nav-item dropdown category-menu">
+                            <router-link :to="{ name: 'category.show', params: {id: sub_category.id} }"
+                                         @click="closeOffcanvasNavbar"
+                                         class="category-link">
+                              {{ sub_category.title }}
+                            </router-link>
+
+                            <!-- Categories of the second level of nesting  -->
+                            <template v-if="sub_category.sub_categories">
+                              <button class="dropdown-item dropdown-toggle category-open-submenu"
+                                      data-bs-toggle="dropdown"
+                                      data-bs-auto-close="outside">
+                                <span class="icon-open-submenu"></span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li v-for="sub_sub_category in sub_category.sub_categories">
+                                  <router-link :to="{ name: 'category.show', params: {id: sub_sub_category.id} }"
+                                               @click="closeOffcanvasNavbar"
+                                               class="dropdown-item">
+                                    {{ sub_sub_category.title }}
+                                  </router-link>
+                                </li>
+                              </ul>
+                            </template>
+                          </li>
+                        </ul>
+                      </template>
                     </li>
                   </ul>
-                </li>
+                </li><!-- ./categories -->
+
                 <li class="nav-item">
                   <a class="nav-link active" aria-current="page" href="index.html">Доставка</a>
                 </li>
@@ -174,7 +189,7 @@ export default {
               <span class="badge text-bg-warning cart-badge bg-warning rounded-circle">3</span>
             </a>
 
-            <button class="btn p-1" id="cart-open" type="button" data-bs-target="#offcanvasCart"
+            <button class="btn p-1" id="cart-open" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart"
                     aria-controls="offcanvasCart">
               <i class="fa-solid fa-cart-shopping"></i>
               <span class="badge text-bg-warning cart-badge bg-warning rounded-circle">5</span>
