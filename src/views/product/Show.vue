@@ -36,7 +36,11 @@ export default {
           <nav class="breadcrumbs">
             <ul>
               <li><a href="/">Главная</a></li>
-              <li><a href="#">{{ product.category.title }}</a></li>
+              <li>
+                <router-link :to="{ name: 'category.show', params: {id: product.category.id} }">
+                  {{ product.category.title }}
+                </router-link>
+              </li>
               <li><span>{{ product.title }}</span></li>
             </ul>
           </nav>
