@@ -18,8 +18,9 @@ export default {
       attributes: {},
       priceMin: null,
       priceMax: null,
-      orderBy: 'default',
+      orderBy: null,
       showBy: 9,
+      pagination: [],
     }
   },
 
@@ -37,6 +38,7 @@ export default {
             this.filters = res.data
             this.priceMin = res.data.prices.min
             this.priceMax = res.data.prices.max
+            this.orderBy = res.data.orderBy[0]
           })
     },
 
@@ -52,7 +54,8 @@ export default {
       })
           .then(res => {
             console.log(res);
-            this.products = res.data.data;
+            this.products = res.data.data
+            this.pagination = res.data.meta
           })
     },
 
@@ -84,6 +87,10 @@ export default {
           <nav class="breadcrumbs">
             <ul>
               <li><a href="/">Главная</a></li>
+              <li v-for="cat in category.parentCategories">
+                <router-link :to="{ name: category.show, params: {id: cat.id}}">
+                  {{ cat.title }}
+                </router-link></li>
               <li><span>{{ category.title }}</span></li>
             </ul>
           </nav>
@@ -153,9 +160,14 @@ export default {
               <img :src="category.image" alt="" class="img-thumbnail">
             </div>
             <div class="col-8 col-sm-10">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus atque, consequatur
-                dolore expedita labore molestiae nobis omnis provident quaerat quasi reiciendis unde. At
-                consequuntur, minus nemo nostrum quae quaerat veniam.</p>
+              <ul class="list-unstyled">
+                <li v-for="cat in category.subcategories">
+                  <router-link :to="{ name: category.show, params: {id:cat.id}}"
+                               class="btn btn-secondary btn-sm me-2 mb-1">
+                    {{ cat.title }}
+                  </router-link>
+                </li>
+              </ul>
             </div>
           </div><!-- ./category description -->
 
@@ -166,11 +178,9 @@ export default {
               <div class="input-group mb-3">
                 <span class="input-group-text">Сортировка:</span>
                 <select v-model="orderBy" @change="getProducts()" class="form-select" aria-label="Sort by:">
-                  <option value="default">По умолчанию</option>
-                  <option value="price_l_h">Увеличение цены</option>
-                  <option value="price_h_l">Уменьшение цены</option>
-                  <option value="name_a_z">Название (а - я)</option>
-                  <option value="name_z_a">Название (я - а)</option>
+                  <template v-for="value in filters.orderBy">
+                    <option :value="value">{{ value }}</option>
+                  </template>
                 </select>
               </div>
             </div>
@@ -216,6 +226,39 @@ export default {
             </div>
           </div><!-- ./products -->
 
+          <div v-if="pagination.last_page > 1" class="row">
+            <div class="col-12 ">
+              <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                  <li v-if="pagination.current_page !== 1" class="page-item">
+                    <a @click.prevent="getProducts(pagination.current_page - 1)" class="page-link" href="#">Previous</a>
+                  </li>
+
+                  <li v-for="link in pagination.links"
+                      :class="link.active ? 'page-item active' : 'page-item'">
+                    <template v-if="Number(link.label) &&
+                      (pagination.current_page - link.label < 2 &&
+                      pagination.current_page - link.label > -2) ||
+                      Number(link.label) === 1 || Number(link.label) === pagination.last_page">
+                      <a @click.prevent="getProducts(link.label)" class="page-link" href="#">{{ link.label }}</a>
+                    </template>
+                    <template v-if="Number(link.label) &&
+                      (pagination.current_page !== 3) &&
+                      (pagination.current_page - link.label === 2) ||
+                      Number(link.label) &&
+                      (pagination.current_page !== pagination.last_page - 2) &&
+                      (pagination.current_page - link.label === -2)">
+                      <a class="page-link">...</a>
+                    </template>
+                  </li>
+
+                  <li v-if="pagination.current_page !== pagination.last_page" class="page-item">
+                    <a @click.prevent="getProducts(pagination.current_page + 1)" class="page-link" href="#">Next</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div><!-- ./pagination -->
 
         </div><!-- ./category catalog -->
       </div>

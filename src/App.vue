@@ -285,7 +285,7 @@ export default {
       </div><!-- ./offcanvas cart -->
     </div><!-- ./header-bottom -->
 
-    <router-view></router-view>
+    <router-view :key="this.$route.params.id"></router-view>
 
     <footer class="footer" id="footer">
       <div class="container">
