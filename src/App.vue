@@ -60,7 +60,7 @@ export default {
                     <ul class="dropdown-menu">
                       <li><a class="dropdown-item" href="login.html">Login</a></li>
                       <li><a class="dropdown-item" href="#">Logout</a></li>
-                      <li><a class="dropdown-item" href="register.html">Register</a></li>
+                      <li><router-link :to="{ name: 'user.register' }" class="dropdown-item">Register</router-link></li>
                     </ul>
                   </div>
                 </div>
