@@ -60,7 +60,7 @@ export default {
                     <ul class="dropdown-menu">
                       <li><a class="dropdown-item" href="login.html">Login</a></li>
                       <li><a class="dropdown-item" href="#">Logout</a></li>
-                      <li><a class="dropdown-item" href="register.html">Register</a></li>
+                      <li><router-link :to="{ name: 'user.register' }" class="dropdown-item">Register</router-link></li>
                     </ul>
                   </div>
                 </div>
@@ -117,7 +117,7 @@ export default {
 
                 <li class="nav-item dropdown menu">
                   <button class="nav-link dropdown-toggle" id="openOffcanvasNavbar" role="button" data-bs-toggle="dropdown"
-                     aria-expanded="false" data-bs-auto-close="outside">
+                          aria-expanded="false" data-bs-auto-close="outside">
                     Каталог</button>
                   <ul class="dropdown-menu">
                     <li v-for="category in categories" class="nav-item dropend category-menu">
