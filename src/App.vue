@@ -5,11 +5,20 @@ export default {
   mounted() {
     $(document).trigger('changed')
     this.getCategories()
+    this.getToken()
   },
+
+  watch: {
+    $route(to, from) {
+      this.getToken()
+    }
+  },
+
 
   data() {
     return {
       categories: [],
+      token: null,
     }
   },
 
@@ -18,6 +27,19 @@ export default {
       axios.get('/api/categories')
           .then(res => {
             this.categories = res.data.data
+          })
+    },
+
+    getToken() {
+      this.token = localStorage.getItem('x_xsrf_token')
+    },
+
+    logout() {
+      axios.post('/api/users/logout')
+          .then(res => {
+            localStorage.removeItem('x_xsrf_token')
+            this.token = null
+            this.$router.push({name: 'user.login'})
           })
     },
 
@@ -58,9 +80,9 @@ export default {
                       Аккаунт
                     </button>
                     <ul class="dropdown-menu">
-                      <li><router-link :to="{ name: 'user.login' }" class="dropdown-item">Вход</router-link></li>
-                      <li><router-link :to="{ name: 'user.register' }" class="dropdown-item">Регистрация</router-link></li>
-                      <li><a class="dropdown-item" href="#">Выйти</a></li>
+                      <li v-if="!token"><router-link :to="{ name: 'user.login' }" class="dropdown-item">Вход</router-link></li>
+                      <li v-if="!token"><router-link :to="{ name: 'user.register' }" class="dropdown-item">Регистрация</router-link></li>
+                      <li v-if="token"><a class="dropdown-item" href="#" @click.prevent="logout">Выйти</a></li>
                     </ul>
                   </div>
                 </div>
