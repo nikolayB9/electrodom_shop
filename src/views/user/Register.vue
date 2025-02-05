@@ -1,10 +1,12 @@
 <script>
 import InputComponent from "@/components/InputComponent.vue";
+import SelectComponent from "@/components/SelectComponent.vue";
 export default {
   name: "Register",
 
   components: {
-    InputComponent
+    InputComponent,
+    SelectComponent
   },
 
   mounted() {
@@ -29,16 +31,15 @@ export default {
 
   computed: {
     isDisabled() {
-      return true
       return this.name && this.email && this.password && this.password_confirmation
     }
   },
 
   methods: {
     register() {
-      this.axios.get('http://localhost:8000/sanctum/csrf-cookie')
+      axios.get('/sanctum/csrf-cookie')
           .then(response => {
-            this.axios.post('http://localhost:8000/api/users/register', {
+            axios.post('/api/users/register', {
               name: this.name,
               surname: this.surname,
               patronymic: this.patronymic,
@@ -51,19 +52,18 @@ export default {
                 .then(res => {
                   localStorage.setItem('x_xsrf_token', res.config.headers['X-XSRF-TOKEN'])
                   this.errors = []
-                  console.log(res);
                 })
                 .catch(err => {
                   this.errors = err.response.data.errors
-                  console.log(this.errors)
                 })
           })
     },
     getGenders() {
-      this.axios.get('http://127.0.0.1:8000/api/users/get-genders')
+      axios.get('/api/users/get-genders')
           .then(res => {
             this.genders = res.data
-            this.gender = res.data[2]
+            console.log(res.data)
+            this.gender = this.genders[0]
           })
     }
   }
@@ -116,16 +116,14 @@ export default {
                                   id="patronymic"
                                   label="Отчество"
                                   placeholder="Введите отчество">
-                  </InputComponent>
+                  </InputComponent >
 
-                  <div class="mb-3">
-                    <label for="gender" class="form-label">Выберите пол</label>
-                    <select v-model="gender"
-                            class="form-control"
-                            id="gender">
-                      <option v-for="gender in genders" :value="gender">{{ gender }}</option>
-                    </select>
-                  </div>
+                  <SelectComponent v-model="gender"
+                                   :errors="errors.gender"
+                                   :values="genders"
+                                   id="gender"
+                                   label="Выберите пол">
+                  </SelectComponent>
 
                   <InputComponent v-model="phone_number"
                                   :errors="errors.phone_number"

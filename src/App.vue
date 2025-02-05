@@ -15,7 +15,7 @@ export default {
 
   methods: {
     getCategories() {
-      this.axios.get('http://127.0.0.1:8000/api/categories')
+      axios.get('/api/categories')
           .then(res => {
             this.categories = res.data.data
           })
