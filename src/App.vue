@@ -55,12 +55,12 @@ export default {
                   <div class="dropdown">
                     <button class="btn btn-sm dropdown-toggle" type="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                      Account
+                      Аккаунт
                     </button>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="login.html">Login</a></li>
-                      <li><a class="dropdown-item" href="#">Logout</a></li>
-                      <li><router-link :to="{ name: 'user.register' }" class="dropdown-item">Register</router-link></li>
+                      <li><router-link :to="{ name: 'user.login' }" class="dropdown-item">Вход</router-link></li>
+                      <li><router-link :to="{ name: 'user.register' }" class="dropdown-item">Регистрация</router-link></li>
+                      <li><a class="dropdown-item" href="#">Выйти</a></li>
                     </ul>
                   </div>
                 </div>

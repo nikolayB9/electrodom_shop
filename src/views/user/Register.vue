@@ -51,7 +51,7 @@ export default {
             })
                 .then(res => {
                   localStorage.setItem('x_xsrf_token', res.config.headers['X-XSRF-TOKEN'])
-                  this.errors = []
+                  this.$router.push({name: 'main'})
                 })
                 .catch(err => {
                   this.errors = err.response.data.errors
@@ -62,7 +62,6 @@ export default {
       axios.get('/api/users/get-genders')
           .then(res => {
             this.genders = res.data
-            console.log(res.data)
             this.gender = this.genders[0]
           })
     }

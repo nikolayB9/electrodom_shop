@@ -9,9 +9,14 @@ const router = createRouter({
       component: () => import('../views/main/Index.vue'),
     },
     {
-      path: '/user/register',
+      path: '/register',
       name: 'user.register',
       component: () => import('../views/user/Register.vue'),
+    },
+    {
+      path: '/login',
+      name: 'user.login',
+      component: () => import('../views/user/Login.vue'),
     },
     {
       path: '/category/:id',
