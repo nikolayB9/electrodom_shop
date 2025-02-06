@@ -26,14 +26,14 @@ export default {
 
   methods: {
     getCategory() {
-      this.axios.get(`http://127.0.0.1:8000/api/categories/${this.$route.params.id}`)
+      axios.get(`/api/categories/${this.$route.params.id}`)
           .then(res => {
             this.category = res.data.data
           })
     },
 
     getFilters() {
-      this.axios.get(`http://127.0.0.1:8000/api/categories/${this.$route.params.id}/get-filters`)
+      axios.get(`/api/categories/${this.$route.params.id}/get-filters`)
           .then(res => {
             this.filters = res.data
             this.priceMin = res.data.prices.min
@@ -43,7 +43,7 @@ export default {
     },
 
     getProducts(page = 1) {
-      this.axios.post('http://127.0.0.1:8000/api/products', {
+      axios.post('/api/products', {
         'categoryId': this.$route.params.id,
         'attributes': this.attributes,
         'priceMin': this.priceMin,
@@ -53,7 +53,6 @@ export default {
         'page': page
       })
           .then(res => {
-            console.log(res);
             this.products = res.data.data
             this.pagination = res.data.meta
           })

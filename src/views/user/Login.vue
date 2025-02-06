@@ -1,7 +1,7 @@
 <script>
 import InputComponent from "@/components/InputComponent.vue";
 export default {
-  name: "Register",
+  name: "Login",
 
   components: {
     InputComponent,
