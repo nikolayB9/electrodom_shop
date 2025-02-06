@@ -1,6 +1,12 @@
 <script>
+import useCart from "@/composables/cart.js";
 export default {
   name: "App",
+
+  setup() {
+    const {cartProducts, removeProduct, cartTotal, totalQty} = useCart()
+    return {cartProducts, removeProduct, cartTotal, totalQty}
+  },
 
   mounted() {
     $(document).trigger('changed')
@@ -43,6 +49,10 @@ export default {
           })
     },
 
+    closeOffcanvasCart() {
+      document.getElementById('closeOffcanvasCart').click()
+    },
+
     closeOffcanvasNavbar() {
       document.getElementById('openOffcanvasNavbar').click()
     },
@@ -80,8 +90,12 @@ export default {
                       Аккаунт
                     </button>
                     <ul class="dropdown-menu">
-                      <li v-if="!token"><router-link :to="{ name: 'user.login' }" class="dropdown-item">Вход</router-link></li>
-                      <li v-if="!token"><router-link :to="{ name: 'user.register' }" class="dropdown-item">Регистрация</router-link></li>
+                      <li v-if="!token">
+                        <router-link :to="{ name: 'user.login' }" class="dropdown-item">Вход</router-link>
+                      </li>
+                      <li v-if="!token">
+                        <router-link :to="{ name: 'user.register' }" class="dropdown-item">Регистрация</router-link>
+                      </li>
                       <li v-if="token"><a class="dropdown-item" href="#" @click.prevent="logout">Выйти</a></li>
                     </ul>
                   </div>
@@ -138,9 +152,11 @@ export default {
               <ul class="navbar-nav">
 
                 <li class="nav-item dropdown menu">
-                  <button class="nav-link dropdown-toggle" id="openOffcanvasNavbar" role="button" data-bs-toggle="dropdown"
+                  <button class="nav-link dropdown-toggle" id="openOffcanvasNavbar" role="button"
+                          data-bs-toggle="dropdown"
                           aria-expanded="false" data-bs-auto-close="outside">
-                    Каталог</button>
+                    Каталог
+                  </button>
                   <ul class="dropdown-menu">
                     <li v-for="category in categories" class="nav-item dropend category-menu">
 
@@ -211,10 +227,11 @@ export default {
               <span class="badge text-bg-warning cart-badge bg-warning rounded-circle">3</span>
             </a>
 
-            <button class="btn p-1" id="cart-open" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart"
+            <button class="btn p-1" id="cart-open" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasCart"
                     aria-controls="offcanvasCart">
               <i class="fa-solid fa-cart-shopping"></i>
-              <span class="badge text-bg-warning cart-badge bg-warning rounded-circle">5</span>
+              <span class="badge text-bg-warning cart-badge bg-warning rounded-circle">{{ totalQty }}</span>
             </button>
           </div>
         </div>
@@ -223,73 +240,52 @@ export default {
       <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart"
            aria-labelledby="offcanvasCartLabel">
         <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasCartLabel">Cart</h5>
+          <h5 v-if="cartProducts.length" class="offcanvas-title" id="offcanvasCartLabel">Корзина</h5>
+          <h5 v-if="!cartProducts.length" class="offcanvas-title" id="offcanvasCartLabel">Корзина пуста</h5>
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                  aria-label="Close"></button>
+                  id="closeOffcanvasCart" aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body">
+        <div v-if="cartProducts.length" class="offcanvas-body">
           <div class="table-responsive-sm">
             <table class="table offcanvasCart-table">
               <tbody>
-              <tr>
+              <tr v-for="product in cartProducts">
                 <td class="product-img-td">
                   <a href="#">
-                    <img src="@/assets/img/products/1.jpg" alt="">
+                    <img :src="product.image" alt="">
                   </a>
                 </td>
                 <td class="product-title-td">
-                  <a href="#">Product 1 Lorem ipsum dolor sit amet, consectetur adipisicing.</a>
+                  <router-link :to="{ name: 'product.show', params: {id: product.id} }"
+                               @click="closeOffcanvasCart"
+                               class="text-size-sm">
+                    <small>{{ product.title }}</small></router-link>
                 </td>
-                <td>$65</td>
-                <td>&times;1</td>
+                <td><small>{{ product.price }}</small></td>
+                <td>&times;{{ product.qty }}</td>
                 <td>
-                  <button class="btn btn-danger"><i class="fa-regular fa-circle-xmark"></i></button>
-                </td>
-              </tr>
-              <tr>
-                <td class="product-img-td">
-                  <a href="#">
-                    <img src="@/assets/img/products/2.jpg" alt="">
-                  </a>
-                </td>
-                <td class="product-title-td">
-                  <a href="#">Product 2</a>
-                </td>
-                <td>$80</td>
-                <td>&times;2</td>
-                <td>
-                  <button class="btn btn-danger"><i class="fa-regular fa-circle-xmark"></i></button>
-                </td>
-              </tr>
-              <tr>
-                <td class="product-img-td">
-                  <a href="#">
-                    <img src="@/assets/img/products/3.jpg" alt="">
-                  </a>
-                </td>
-                <td class="product-title-td">
-                  <a href="#">Product 3</a>
-                </td>
-                <td>$100</td>
-                <td>&times;1</td>
-                <td>
-                  <button class="btn btn-danger"><i class="fa-regular fa-circle-xmark"></i></button>
+                  <button @click="removeProduct(product.id)" class="btn btn-danger"><i class="fa-regular fa-circle-xmark"></i></button>
                 </td>
               </tr>
               </tbody>
               <tfoot>
               <tr>
-                <td colspan="4" class="text-end">Total:</td>
-                <td>325</td>
+                <td colspan="3" class="text-end">Total:</td>
+                <td colspan="2" class="text-end">{{ cartTotal }}</td>
+              </tr>
+              <tr>
+                <td colspan="5" class="text-end pt-4" style="border-bottom-width: 0;">
+                  <router-link :to="{ name: 'cart.index' }" @click="closeOffcanvasCart"
+                               class="btn btn-outline-warning me-1">
+                    Корзина
+                  </router-link>
+                  <a href="#" class="btn btn-outline-secondary">Оформить</a>
+                </td>
               </tr>
               </tfoot>
             </table>
           </div>
 
-          <div class="text-end mt-3">
-            <a href="cart.html" class="btn btn-outline-warning">Корзина</a>
-            <a href="checkout.html" class="btn btn-outline-secondary">Оформить</a>
-          </div>
 
           <!--Пример кнопок, закрывающих панель и делающих скролл-->
           <!--<div class="dropdown mt-3">
@@ -305,6 +301,7 @@ export default {
           </div>-->
         </div>
       </div><!-- ./offcanvas cart -->
+
     </div><!-- ./header-bottom -->
 
     <router-view :key="this.$route.params.id"></router-view>

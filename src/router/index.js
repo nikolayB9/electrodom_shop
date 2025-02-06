@@ -19,6 +19,11 @@ const router = createRouter({
       component: () => import('../views/user/Login.vue'),
     },
     {
+      path: '/cart',
+      name: 'cart.index',
+      component: () => import('../views/cart/Index.vue'),
+    },
+    {
       path: '/category/:id',
       name: 'category.show',
       component: () => import('../views/category/Show.vue'),

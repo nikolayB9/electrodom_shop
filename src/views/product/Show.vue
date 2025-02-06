@@ -1,6 +1,13 @@
 <script>
+import useCart from "@/composables/cart.js";
+
 export default {
   name: "Show",
+
+  setup() {
+    const {addProduct} = useCart()
+    return {addProduct}
+  },
 
   mounted() {
     $(document).trigger('changed')
@@ -10,6 +17,7 @@ export default {
   data() {
     return {
       product: null,
+      qty: 1,
     }
 
   },
@@ -35,7 +43,7 @@ export default {
         <div class="col-12">
           <nav class="breadcrumbs">
             <ul>
-              <li><a href="/">Главная</a></li>
+              <li><router-link :to="{ name: 'main' }">Главная</router-link></li>
               <li>
                 <router-link :to="{ name: 'category.show', params: {id: product.category.id} }">
                   {{ product.category.title }}
@@ -57,9 +65,9 @@ export default {
                 <div class="carousel-item active">
                   <img :src="product.image" class="d-block w-100" alt="...">
                 </div>
-<!--                <div class="carousel-item">
-                  <img src="" class="d-block w-100" alt="...">
-                </div>-->
+                <!--                <div class="carousel-item">
+                                  <img src="" class="d-block w-100" alt="...">
+                                </div>-->
               </div>
               <button class="carousel-control-prev" type="button" data-bs-target="#carouselProduct"
                       data-bs-slide="prev">
@@ -87,7 +95,7 @@ export default {
             <div class="product-add2cart">
               <div class="input-group">
                 <input v-model="qty" type=number class="form-control" value="1" min="1">
-                <button class="btn btn-warning">
+                <button @click.prevent="addProduct(product, qty)" class="btn btn-warning">
                   <i class="fas fa-shopping-cart"></i>Add to cart
                 </button>
               </div>

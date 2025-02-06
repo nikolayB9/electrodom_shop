@@ -72,6 +72,9 @@ export default {
       }
     },
 
+    addToCart(product) {
+
+    }
 
   }
 }
@@ -85,7 +88,7 @@ export default {
         <div class="col-12">
           <nav class="breadcrumbs">
             <ul>
-              <li><a href="/">Главная</a></li>
+              <li><router-link :to="{ name: 'main' }">Главная</router-link></li>
               <li v-for="cat in category.parentCategories">
                 <router-link :to="{ name: category.show, params: {id: cat.id}}">
                   {{ cat.title }}
@@ -218,6 +221,12 @@ export default {
                     <div class="product-price">
                       <small v-if="product.old_price">{{ product.old_price }} &#8381;</small>
                       {{ product.price }} &#8381;
+                    </div>
+
+                    <div class="product-links">
+                      <a @click.prevent="addToCart(product)" href="#" class="btn btn-outline-secondary add-to-cart"><i
+                          class="fas fa-shopping-cart"></i>
+                      </a>
                     </div>
                   </div>
                 </div>
