@@ -22,7 +22,9 @@ export default {
         <div class="col-12">
           <nav class="breadcrumbs">
             <ul>
-              <li><router-link :to="{ name: 'main' }">Главная</router-link></li>
+              <li>
+                <router-link :to="{ name: 'main' }">Главная</router-link>
+              </li>
               <li><span>Корзина</span></li>
             </ul>
           </nav>
@@ -96,8 +98,10 @@ export default {
               <h4 class="text-nowrap">{{ cartTotal }} &#8381;</h4>
             </div>
 
-            <div class="d-grid">
-              Оформить заказ
+            <div v-if="cartProducts.length" class="d-grid">
+              <router-link :to="{ name: 'checkout.index' }" class="btn btn-warning">
+                Оформить заказ
+              </router-link>
             </div>
           </div>
         </div><!-- ./cart-summary -->

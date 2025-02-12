@@ -1,7 +1,13 @@
 <script>
+import useCart from "@/composables/cart.js";
 
 export default {
   name: "Show",
+
+  setup() {
+    const {addProduct} = useCart()
+    return {addProduct}
+  },
 
   mounted() {
     $(document).trigger('changed')
@@ -71,11 +77,6 @@ export default {
         this.attributes[attributeId] = [value]
       }
     },
-
-    addToCart(product) {
-
-    }
-
   }
 }
 </script>
@@ -88,11 +89,14 @@ export default {
         <div class="col-12">
           <nav class="breadcrumbs">
             <ul>
-              <li><router-link :to="{ name: 'main' }">Главная</router-link></li>
+              <li>
+                <router-link :to="{ name: 'main' }">Главная</router-link>
+              </li>
               <li v-for="cat in category.parentCategories">
                 <router-link :to="{ name: category.show, params: {id: cat.id}}">
                   {{ cat.title }}
-                </router-link></li>
+                </router-link>
+              </li>
               <li><span>{{ category.title }}</span></li>
             </ul>
           </nav>
@@ -224,7 +228,7 @@ export default {
                     </div>
 
                     <div class="product-links">
-                      <a @click.prevent="addToCart(product)" href="#" class="btn btn-outline-secondary add-to-cart"><i
+                      <a @click.prevent="addProduct(product)" href="#" class="btn btn-outline-secondary add-to-cart"><i
                           class="fas fa-shopping-cart"></i>
                       </a>
                     </div>

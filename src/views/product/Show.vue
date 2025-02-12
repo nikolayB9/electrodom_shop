@@ -43,7 +43,9 @@ export default {
         <div class="col-12">
           <nav class="breadcrumbs">
             <ul>
-              <li><router-link :to="{ name: 'main' }">Главная</router-link></li>
+              <li>
+                <router-link :to="{ name: 'main' }">Главная</router-link>
+              </li>
               <li>
                 <router-link :to="{ name: 'category.show', params: {id: product.category.id} }">
                   {{ product.category.title }}

@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "Input",
+  name: "InputComponent",
 
   props: [
     'type',
@@ -9,6 +9,7 @@ export default {
     'label',
     'placeholder',
     'required',
+    'disabled',
     'errors',
   ],
 
@@ -26,6 +27,7 @@ export default {
            :class="{ 'is-invalid': errors }"
            :id="id"
            :placeholder="placeholder"
+           :disabled="disabled"
            :required="required ?? false">
     <template v-if="errors">
       <div v-for="error in errors" class="invalid-feedback">{{ error }}</div>

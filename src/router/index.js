@@ -24,6 +24,11 @@ const router = createRouter({
       component: () => import('../views/cart/Index.vue'),
     },
     {
+      path: '/checkout',
+      name: 'checkout.index',
+      component: () => import('../views/checkout/Index.vue'),
+    },
+    {
       path: '/category/:id',
       name: 'category.show',
       component: () => import('../views/category/Show.vue'),
@@ -38,8 +43,15 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('x_xsrf_token')
+  const cart = JSON.parse(localStorage.getItem('cart')) ?? null
 
   if ((to.name === 'user.login' || to.name === 'user.register') && token) {
+    return next({
+      name: 'main'
+    })
+  }
+
+  if ((to.name === 'cart.index' || to.name === 'checkout.index') && (!cart || !cart.length)) {
     return next({
       name: 'main'
     })

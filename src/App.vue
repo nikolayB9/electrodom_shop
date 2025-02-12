@@ -1,5 +1,6 @@
 <script>
 import useCart from "@/composables/cart.js";
+
 export default {
   name: "App",
 
@@ -19,7 +20,6 @@ export default {
       this.getToken()
     }
   },
-
 
   data() {
     return {
@@ -227,7 +227,12 @@ export default {
               <span class="badge text-bg-warning cart-badge bg-warning rounded-circle">3</span>
             </a>
 
-            <button class="btn p-1" id="cart-open" type="button" data-bs-toggle="offcanvas"
+            <button v-if="!cartProducts.length" class="btn p-1" type="button">
+              <i class="fa-solid fa-cart-shopping"></i>
+              <span class="badge text-bg-warning cart-badge bg-warning rounded-circle">{{ totalQty }}</span>
+            </button>
+
+            <button v-if="cartProducts.length" class="btn p-1" id="cart-open" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasCart"
                     aria-controls="offcanvasCart">
               <i class="fa-solid fa-cart-shopping"></i>
@@ -240,12 +245,11 @@ export default {
       <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart"
            aria-labelledby="offcanvasCartLabel">
         <div class="offcanvas-header">
-          <h5 v-if="cartProducts.length" class="offcanvas-title" id="offcanvasCartLabel">Корзина</h5>
-          <h5 v-if="!cartProducts.length" class="offcanvas-title" id="offcanvasCartLabel">Корзина пуста</h5>
+          <h5 class="offcanvas-title" id="offcanvasCartLabel">Корзина</h5>
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                   id="closeOffcanvasCart" aria-label="Close"></button>
         </div>
-        <div v-if="cartProducts.length" class="offcanvas-body">
+        <div class="offcanvas-body">
           <div class="table-responsive-sm">
             <table class="table offcanvasCart-table">
               <tbody>
@@ -264,22 +268,26 @@ export default {
                 <td><small>{{ product.price }}</small></td>
                 <td>&times;{{ product.qty }}</td>
                 <td>
-                  <button @click="removeProduct(product.id)" class="btn btn-danger"><i class="fa-regular fa-circle-xmark"></i></button>
+                  <button @click="removeProduct(product.id)" class="btn btn-danger"><i
+                      class="fa-regular fa-circle-xmark"></i></button>
                 </td>
               </tr>
               </tbody>
               <tfoot>
               <tr>
-                <td colspan="3" class="text-end">Total:</td>
+                <td colspan="3" class="text-end">Общая цена:</td>
                 <td colspan="2" class="text-end">{{ cartTotal }}</td>
               </tr>
               <tr>
-                <td colspan="5" class="text-end pt-4" style="border-bottom-width: 0;">
+                <td v-if="cartProducts.length" colspan="5" class="text-end pt-4" style="border-bottom-width: 0;">
                   <router-link :to="{ name: 'cart.index' }" @click="closeOffcanvasCart"
                                class="btn btn-outline-warning me-1">
                     Корзина
                   </router-link>
-                  <a href="#" class="btn btn-outline-secondary">Оформить</a>
+                  <router-link :to="{ name: 'checkout.index' }" @click="closeOffcanvasCart"
+                               class="btn btn-outline-secondary">
+                    Оформить
+                  </router-link>
                 </td>
               </tr>
               </tfoot>

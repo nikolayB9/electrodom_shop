@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "Input",
+  name: "SelectComponent",
 
   props: [
     'modelValue',
