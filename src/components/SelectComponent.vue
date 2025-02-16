@@ -8,6 +8,7 @@ export default {
     'id',
     'label',
     'errors',
+    'withName',
   ],
 
   emits: ['update:modelValue']
@@ -22,7 +23,12 @@ export default {
             class="form-select"
             :class="{ 'is-invalid': errors }"
             :id="id">
-      <option v-for="value in values" :value="value">{{ value }}</option>
+      <template v-if="withName">
+        <option v-for="item in values" :value="item.value">{{ item.name }}</option>
+      </template>
+      <template v-if="!withName">
+        <option v-for="value in values" :value="value">{{ value }}</option>
+      </template>
     </select>
     <template v-if="errors">
       <div v-for="error in errors" class="invalid-feedback">{{ error }}</div>

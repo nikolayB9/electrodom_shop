@@ -15,6 +15,11 @@ export default function useCart() {
         localStorage.setItem('cart', JSON.stringify(cartProducts.value))
     }
 
+    function clearCart() {
+        localStorage.removeItem('cart')
+        cartProducts.value = []
+    }
+
     function changeQty(product) {
         const qty = document.getElementById(product.title).value
         if (qty > 0 && qty % 1 === 0) {
@@ -74,5 +79,5 @@ export default function useCart() {
     })
 
     return {cartProducts, cartTotal, productsMinData, getProducts, updateStorage, changeQty, totalQty, removeProduct, addProduct,
-        getDecimalPrice}
+        getDecimalPrice, clearCart}
 }

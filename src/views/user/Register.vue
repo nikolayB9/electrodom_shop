@@ -62,7 +62,7 @@ export default {
       axios.get('/api/users/get-genders')
           .then(res => {
             this.genders = res.data
-            this.gender = this.genders[0]
+            this.gender = this.genders[0].value
           })
     }
   }
@@ -118,6 +118,7 @@ export default {
                   </InputComponent >
 
                   <SelectComponent v-model="gender"
+                                   :withName="true"
                                    :errors="errors.gender"
                                    :values="genders"
                                    id="gender"

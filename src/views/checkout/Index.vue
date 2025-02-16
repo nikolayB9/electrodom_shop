@@ -7,8 +7,8 @@ export default {
   components: {InputComponent},
 
   setup() {
-    const {productsMinData} = useCart()
-    return {productsMinData}
+    const {productsMinData, clearCart} = useCart()
+    return {productsMinData, clearCart}
   },
 
   mounted() {
@@ -37,6 +37,7 @@ export default {
       flat_number: null,
       comment: null,
       errors: [],
+      success: null,
     }
   },
 
@@ -59,6 +60,7 @@ export default {
       if (this.token) {
         axios.get('/api/users/show')
             .then(res => {
+              console.log(res);
               this.auth = true
               const user = res.data.data
               this.name = user.name
@@ -80,8 +82,6 @@ export default {
         'products': this.productsMinData,
         'coupon': this.coupon,
         'shipping': this.shipping,
-        'cartPrice': this.cartPrice,
-        'totalPrice': this.totalPrice,
         'name': this.name,
         'surname': this.surname,
         'patronymic': this.patronymic,
@@ -94,6 +94,9 @@ export default {
         'comment': this.comment,
       })
           .then(res => {
+            this.clearCart()
+            this.errors = []
+            this.success = true
             console.log(res);
           })
           .catch(err => {
@@ -120,6 +123,16 @@ export default {
         </div>
       </div>
     </div><!-- ./breadcrumbs -->
+
+    <div v-if="success" class="container">
+      <div class="row">
+        <div class="col-12 mb-3">
+          <div class="checkout-content py-5 h2 h-100 bg-white text-center">
+            Ваш заказ успешно оформлен
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div v-if="productsMinData.length" class="container">
       <div class="row">

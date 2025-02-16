@@ -222,10 +222,10 @@ export default {
           </div><!-- ./offcanvas header-bottom -->
 
           <div>
-            <a href="#" class="btn p-1">
+<!--            <a href="#" class="btn p-1">
               <i class="fa-solid fa-heart"></i>
               <span class="badge text-bg-warning cart-badge bg-warning rounded-circle">3</span>
-            </a>
+            </a>-->
 
             <button v-if="!cartProducts.length" class="btn p-1" type="button">
               <i class="fa-solid fa-cart-shopping"></i>
