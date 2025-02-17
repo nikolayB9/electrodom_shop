@@ -1,29 +1,27 @@
 # electrodom_shop
 
-This template should help get you started developing with Vue 3 in Vite.
+This is the frontend part of the application. Before launching, you need to install and run the
+backend - [electrodom_admin](https://github.com/WrSr12/electrodom_admin).
 
-## Recommended IDE Setup
+### About
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+ElectroDom is a pet project of an online store for the sale of supposedly electrical goods. The backend is executed on
+Laravel, the frontend on VueJS.
 
-## Customize configuration
+### Used in the project
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- VueJs 3
+- Axios
+- VueRouter
+- Bootstrap 5
 
-## Project Setup
+### Setup
 
-```sh
-npm install
 ```
-
-### Compile and Hot-Reload for Development
-
-```sh
+npm install
 npm run dev
 ```
 
-### Compile and Minify for Production
+#
 
-```sh
-npm run build
-```
+

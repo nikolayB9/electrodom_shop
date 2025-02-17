@@ -59,7 +59,6 @@ export default {
         'page': page
       })
           .then(res => {
-            console.log(res)
             this.products = res.data.data
             this.pagination = res.data.meta
           })
