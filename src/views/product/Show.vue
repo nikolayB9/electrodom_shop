@@ -27,6 +27,7 @@ export default {
       axios.get(`/api/products/${this.$route.params.id}`)
           .then(res => {
             this.product = res.data.data
+            console.log(this.product)
           })
           .finally(v => {
             $(document).trigger('changed')
@@ -45,6 +46,11 @@ export default {
             <ul>
               <li>
                 <router-link :to="{ name: 'main' }">Главная</router-link>
+              </li>
+              <li v-for="cat in product.category.parentCategories">
+                <router-link :to="{ name: 'category.show', params: {id: cat.id}}">
+                  {{ cat.title }}
+                </router-link>
               </li>
               <li>
                 <router-link :to="{ name: 'category.show', params: {id: product.category.id} }">

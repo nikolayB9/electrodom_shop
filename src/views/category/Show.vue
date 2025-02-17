@@ -44,7 +44,7 @@ export default {
             this.filters = res.data
             this.priceMin = res.data.prices.min
             this.priceMax = res.data.prices.max
-            this.orderBy = res.data.orderBy[0]
+            this.orderBy = res.data.orderBy[0]['value']
           })
     },
 
@@ -59,6 +59,7 @@ export default {
         'page': page
       })
           .then(res => {
+            console.log(res)
             this.products = res.data.data
             this.pagination = res.data.meta
           })
@@ -93,7 +94,7 @@ export default {
                 <router-link :to="{ name: 'main' }">Главная</router-link>
               </li>
               <li v-for="cat in category.parentCategories">
-                <router-link :to="{ name: category.show, params: {id: cat.id}}">
+                <router-link :to="{ name: 'category.show', params: {id: cat.id}}">
                   {{ cat.title }}
                 </router-link>
               </li>
@@ -184,8 +185,8 @@ export default {
               <div class="input-group mb-3">
                 <span class="input-group-text">Сортировка:</span>
                 <select v-model="orderBy" @change="getProducts()" class="form-select" aria-label="Sort by:">
-                  <template v-for="value in filters.orderBy">
-                    <option :value="value">{{ value }}</option>
+                  <template v-for="item in filters.orderBy">
+                    <option :value="item.value">{{ item.name }}</option>
                   </template>
                 </select>
               </div>

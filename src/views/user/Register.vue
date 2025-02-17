@@ -127,10 +127,10 @@ export default {
 
                   <InputComponent v-model="phone_number"
                                   :errors="errors.phone_number"
-                                  type="number"
                                   id="phone_number"
                                   label="Номер телефона"
-                                  placeholder="Введите номер телефона">
+                                  required="true"
+                                  placeholder="+7">
                   </InputComponent>
 
                   <InputComponent v-model="email"

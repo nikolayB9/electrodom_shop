@@ -97,7 +97,6 @@ export default {
             this.clearCart()
             this.errors = []
             this.success = true
-            console.log(res);
           })
           .catch(err => {
             this.errors = err.response.data.errors
