@@ -60,7 +60,6 @@ export default {
       if (this.token) {
         axios.get('/api/users/show')
             .then(res => {
-              console.log(res);
               this.auth = true
               const user = res.data.data
               this.name = user.name
@@ -189,7 +188,7 @@ export default {
                 <InputComponent :disabled="auth"
                                 v-model="phone_number"
                                 :errors="errors.phone_number"
-                                type="number"
+                                type="text"
                                 id="phone_number"
                                 label="Номер телефона"
                                 required="true">
