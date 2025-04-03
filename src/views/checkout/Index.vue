@@ -38,6 +38,7 @@ export default {
       comment: null,
       errors: [],
       success: null,
+      isSubmit: false,
     }
   },
 
@@ -77,6 +78,8 @@ export default {
       }
     },
     storeOrder() {
+      if (this.isSubmit) return
+      this.isSubmit = true
       axios.post('/api/orders/store', {
         'products': this.productsMinData,
         'coupon': this.coupon,
@@ -92,13 +95,14 @@ export default {
         'flat': this.flat_number,
         'comment': this.comment,
       })
-          .then(res => {
+          .then(() => {
             this.clearCart()
             this.errors = []
             this.success = true
           })
           .catch(err => {
             this.errors = err.response.data.errors
+            this.isSubmit = false
           })
     },
   }
@@ -290,7 +294,9 @@ export default {
             </div>
 
             <div class="d-grid mt-3">
-              <button @click.prevent="storeOrder" class="btn btn-warning">Оформить заказ</button>
+              <button @click.prevent="storeOrder" class="btn btn-warning" :disabled="isSubmit">
+                {{ isSubmit ? 'Оформить заказ...' : 'Оформить заказ' }}
+              </button>
             </div>
           </div>
         </div>
